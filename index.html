@@ -55,12 +55,17 @@ button {
     border: none;
     font-size: 16px;
     font-weight: bold;
-    background: linear-gradient(90deg, #00ff9c, #00cfff);
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
-button:hover {
-    opacity: 0.9;
+.buy {
+    background: linear-gradient(90deg, #00ff9c, #00cfff);
+}
+
+.metamask {
+    background: #f6851b;
+    color: #000;
 }
 
 .info {
@@ -82,20 +87,18 @@ button:hover {
     <h1>ESO Presale</h1>
     <div class="rate">2 BNB = 1,000,000 ESO</div>
 
-    <input
-        id="amount"
-        type="number"
-        min="0.01"
-        step="0.01"
-        placeholder="Enter BNB amount"
-    >
+    <input id="amount" type="number" min="0.01" step="0.01" placeholder="Enter BNB amount">
 
-    <button onclick="buy()">Buy with MetaMask</button>
+    <!-- زر الكمبيوتر -->
+    <button class="buy" onclick="buyDesktop()">Buy with MetaMask (Desktop)</button>
+
+    <!-- زر الهاتف -->
+    <button class="metamask" onclick="openMetaMask()">
+        Open in MetaMask App (Mobile)
+    </button>
 
     <div class="info">
-        Min: 0.01 BNB<br>
-        Tokens delivered automatically<br>
-        Mobile users will be redirected to MetaMask app
+        Mobile users must open the site inside MetaMask browser
     </div>
 
     <div id="status"></div>
@@ -104,36 +107,29 @@ button:hover {
 <script>
 const WALLET_ADDRESS = "0x54459e1D8E931053C847412F22b69040C143b4fe";
 
-async function buy() {
+function openMetaMask() {
+    const url = encodeURIComponent(window.location.href);
+    window.location.href = https://metamask.app.link/dapp/${url};
+}
+
+async function buyDesktop() {
     const status = document.getElementById("status");
     const amount = document.getElementById("amount").value;
 
+    if (!window.ethereum) {
+        status.innerText = "MetaMask not detected. Use the MetaMask App button.";
+        return;
+    }
+
     if (!amount || amount <= 0) {
-        status.innerText = "Please enter a valid BNB amount";
-        return;
-    }
-
-    const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
-
-    // 📱 Mobile: redirect to MetaMask app
-    if (isMobile && typeof window.ethereum === "undefined") {
-        const dappUrl = encodeURIComponent(window.location.href);
-        window.location.href = https://metamask.app.link/dapp/${dappUrl};
-        return;
-    }
-
-    // 💻 Desktop or MetaMask browser
-    if (typeof window.ethereum === "undefined") {
-        status.innerText = "MetaMask is not installed";
+        status.innerText = "Enter valid BNB amount";
         return;
     }
 
     try {
-        const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts"
-        });
+        const accounts = await ethereum.request({ method: "eth_requestAccounts" });
 
-        await window.ethereum.request({
+        await ethereum.request({
             method: "eth_sendTransaction",
             params: [{
                 from: accounts[0],
