@@ -2,55 +2,105 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>لوحة التحكم</title>
+
 <style>
-body{font-family:Arial;background:#111;color:#fff;padding:20px}
-input,button{width:100%;margin:6px 0;padding:10px}
-button{background:#00e0ff;border:0;font-weight:bold}
-img{width:90px;height:90px;border-radius:50%;display:block;margin:10px auto}
+body{
+    font-family:Arial, Tahoma;
+    background:#0f2027;
+    color:#fff;
+    padding:20px;
+}
+.container{
+    max-width:400px;
+    margin:auto;
+    background:rgba(255,255,255,.08);
+    padding:20px;
+    border-radius:15px;
+}
+h2{
+    text-align:center;
+}
+input,button{
+    width:100%;
+    margin:8px 0;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    font-size:14px;
+}
+button{
+    background:#00e0ff;
+    font-weight:bold;
+    cursor:pointer;
+}
+img{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    display:block;
+    margin:10px auto;
+    object-fit:cover;
+    border:3px solid #fff;
+}
 </style>
 </head>
 
 <body>
 
-<h2>لوحة التحكم</h2>
+<div class="container">
+    <h2>لوحة التحكم</h2>
 
-<img id="preview">
-<input type="file" id="avatar">
+    <!-- صورة -->
+    <img id="preview">
+    <input type="file" id="avatarInput" accept="image/*">
 
-<input id="name" placeholder="الاسم">
-<input id="job" placeholder="الوصف">
+    <!-- الاسم -->
+    <input type="text" id="name" placeholder="الاسم">
 
-<button onclick="save()">حفظ</button>
+    <!-- الوصف -->
+    <input type="text" id="job" placeholder="الوصف">
+
+    <button onclick="saveData()">حفظ التغييرات</button>
+</div>
 
 <script>
 const preview = document.getElementById("preview");
-const avatar = document.getElementById("avatar");
+const avatarInput = document.getElementById("avatarInput");
+const nameInput = document.getElementById("name");
+const jobInput = document.getElementById("job");
 
-// تحميل البيانات المحفوظة
-const saved = JSON.parse(localStorage.getItem("linksData"));
-if(saved){
-  name.value = saved.name || "";
-  job.value = saved.job || "";
-  if(saved.avatar) preview.src = saved.avatar;
-}
+/* تحميل البيانات المحفوظة */
+const savedData = JSON.parse(localStorage.getItem("linksData")) || {};
 
-// معاينة الصورة
-avatar.onchange = ()=>{
-  const file = avatar.files[0];
-  const reader = new FileReader();
-  reader.onload = ()=> preview.src = reader.result;
-  reader.readAsDataURL(file);
-}
+if(savedData.name) nameInput.value = savedData.name;
+if(savedData.job) jobInput.value = savedData.job;
+if(savedData.avatar) preview.src = savedData.avatar;
 
-function save(){
-  const data = {
-    name: name.value,
-    job: job.value,
-    avatar: preview.src || ""
-  };
-  localStorage.setItem("linksData", JSON.stringify(data));
-  alert("✅ تم الحفظ");
+/* معاينة الصورة */
+avatarInput.addEventListener("change", () => {
+    const file = avatarInput.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        preview.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+/* حفظ البيانات */
+function saveData(){
+    const data = {
+        name: nameInput.value.trim(),   // ⬅️ الاسم يُحفظ هنا
+        job: jobInput.value.trim(),
+        avatar: preview.src || ""
+    };
+
+    console.log("SAVED:", data); // للتأكد
+
+    localStorage.setItem("linksData", JSON.stringify(data));
+    alert("✅ تم حفظ الاسم بنجاح");
 }
 </script>
 
