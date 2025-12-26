@@ -9,7 +9,7 @@
 body{
     margin:0;
     font-family:Arial, Tahoma;
-    background:#111;
+    background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
     min-height:100vh;
     display:flex;
     justify-content:center;
@@ -18,21 +18,36 @@ body{
 }
 .container{
     width:380px;
-    background:#1c1c1c;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(14px);
     border-radius:20px;
     padding:20px;
 }
-h2{text-align:center}
-label{font-size:13px}
+h2{
+    text-align:center;
+    margin-bottom:15px;
+}
+label{
+    font-size:13px;
+    opacity:.9;
+}
 input,button{
     width:100%;
     padding:10px;
     margin:6px 0 10px;
     border-radius:8px;
     border:none;
+    font-size:14px;
+}
+input{
+    background:#fff;
+}
+input[type="color"]{
+    height:45px;
+    padding:4px;
 }
 button{
-    background:#00e0ff;
+    background:#fff;
     font-weight:bold;
     cursor:pointer;
 }
@@ -41,17 +56,14 @@ button{
     height:90px;
     border-radius:50%;
     border:3px solid #fff;
+    object-fit:cover;
     display:block;
     margin:10px auto;
-    object-fit:cover;
-}
-input[type="color"]{
-    height:45px;
 }
 hr{
     border:0;
     height:1px;
-    background:#333;
+    background:rgba(255,255,255,.3);
     margin:12px 0;
 }
 </style>
@@ -67,35 +79,46 @@ hr{
 <input type="file" id="avatarInput" accept="image/*">
 
 <label>الاسم</label>
-<input id="name">
+<input id="name" placeholder="الاسم">
 
 <label>الوصف</label>
-<input id="job">
+<input id="job" placeholder="الوصف">
 
 <hr>
 
 <label>Instagram</label>
-<input id="instagram">
+<input id="instagram" placeholder="https://instagram.com/...">
+
 <label>Snapchat</label>
-<input id="snapchat">
+<input id="snapchat" placeholder="https://snapchat.com/...">
+
 <label>Telegram</label>
-<input id="telegram">
+<input id="telegram" placeholder="https://t.me/...">
+
 <label>YouTube</label>
-<input id="youtube">
+<input id="youtube" placeholder="https://youtube.com/...">
 
 <hr>
 
-<label>زر 1 نص</label><input id="btn1text">
-<label>زر 1 رابط</label><input id="btn1link">
+<label>زر 1 (نص)</label>
+<input id="btn1text">
+<label>زر 1 (رابط)</label>
+<input id="btn1link">
 
-<label>زر 2 نص</label><input id="btn2text">
-<label>زر 2 رابط</label><input id="btn2link">
+<label>زر 2 (نص)</label>
+<input id="btn2text">
+<label>زر 2 (رابط)</label>
+<input id="btn2link">
 
-<label>زر 3 نص</label><input id="btn3text">
-<label>زر 3 رابط</label><input id="btn3link">
+<label>زر 3 (نص)</label>
+<input id="btn3text">
+<label>زر 3 (رابط)</label>
+<input id="btn3link">
 
-<label>زر 4 نص</label><input id="btn4text">
-<label>زر 4 رابط</label><input id="btn4link">
+<label>زر 4 (نص)</label>
+<input id="btn4text">
+<label>زر 4 (رابط)</label>
+<input id="btn4link">
 
 <hr>
 
@@ -118,7 +141,7 @@ hr{
 const preview = document.getElementById("preview");
 const avatarInput = document.getElementById("avatarInput");
 
-/* تحميل البيانات بشكل صريح */
+/* تحميل البيانات */
 const data = JSON.parse(localStorage.getItem("linksData")) || {};
 
 if(data.name) name.value = data.name;
@@ -142,35 +165,35 @@ if(data.btnColor) btnColor.value = data.btnColor;
 
 /* معاينة الصورة */
 avatarInput.onchange = ()=>{
-  const file = avatarInput.files[0];
-  if(!file) return;
-  const r = new FileReader();
-  r.onload = ()=> preview.src = r.result;
-  r.readAsDataURL(file);
+    const file = avatarInput.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=> preview.src = reader.result;
+    reader.readAsDataURL(file);
 };
 
 /* حفظ البيانات */
 function saveData(){
-  const newData = {
-    name: name.value.trim(),
-    job: job.value.trim(),
-    avatar: preview.src || "",
-    instagram: instagram.value.trim(),
-    snapchat: snapchat.value.trim(),
-    telegram: telegram.value.trim(),
-    youtube: youtube.value.trim(),
-    btn1:{ text:btn1text.value.trim(), link:btn1link.value.trim() },
-    btn2:{ text:btn2text.value.trim(), link:btn2link.value.trim() },
-    btn3:{ text:btn3text.value.trim(), link:btn3link.value.trim() },
-    btn4:{ text:btn4text.value.trim(), link:btn4link.value.trim() },
-    bg1:bg1.value,
-    bg2:bg2.value,
-    bg3:bg3.value,
-    btnColor:btnColor.value
-  };
+    const newData = {
+        name: name.value.trim(),
+        job: job.value.trim(),
+        avatar: preview.src || "",
+        instagram: instagram.value.trim(),
+        snapchat: snapchat.value.trim(),
+        telegram: telegram.value.trim(),
+        youtube: youtube.value.trim(),
+        btn1:{ text:btn1text.value.trim(), link:btn1link.value.trim() },
+        btn2:{ text:btn2text.value.trim(), link:btn2link.value.trim() },
+        btn3:{ text:btn3text.value.trim(), link:btn3link.value.trim() },
+        btn4:{ text:btn4text.value.trim(), link:btn4link.value.trim() },
+        bg1: bg1.value,
+        bg2: bg2.value,
+        bg3: bg3.value,
+        btnColor: btnColor.value
+    };
 
-    localStorage.setItem("linksData", ;JSON.stringify(newData))
-  alert("✅ تم حفظ الاسم ولن يختفي بعد الآن");
+    localStorage.setItem("linksData", JSON.stringify(newData));
+    alert("✅ تم حفظ جميع البيانات بنجاح");
 }
 </script>
 
