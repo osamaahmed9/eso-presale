@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Link in Bio</title>
 
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -17,23 +16,19 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(135deg,
-        #833ab4,
-        #fd1d1d,
-        #fcb045
-    );
+    background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
 }
 
-/* الكارد */
+/* الكرت */
 .card{
     width:360px;
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(15px);
-    border-radius:22px;
-    padding:30px 20px;
+    background:rgba(255,255,255,.18);
+    backdrop-filter:blur(18px);
+    border-radius:26px;
+    padding:28px 22px;
     text-align:center;
     color:#fff;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    box-shadow:0 15px 35px rgba(0,0,0,.35);
 }
 
 /* الصورة */
@@ -48,8 +43,9 @@ body{
 
 /* الاسم */
 h2{
-    margin:6px 0 2px;
+    margin:8px 0 4px;
     font-size:22px;
+    font-weight:bold;
 }
 
 /* الوصف */
@@ -63,14 +59,14 @@ p{
 .socials{
     display:flex;
     justify-content:center;
-    gap:18px;
+    gap:16px;
+    margin-bottom:20px;
 }
-
 .socials a{
-    width:45px;
-    height:45px;
+    width:46px;
+    height:46px;
     border-radius:50%;
-    background:rgba(255,255,255,.25);
+    background:rgba(255,255,255,.28);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -78,11 +74,27 @@ p{
     font-size:20px;
     transition:.3s;
 }
-
 .socials a:hover{
     transform:scale(1.15);
     background:#fff;
     color:#fd1d1d;
+}
+
+/* الأزرار المستطيلة */
+.buttons a{
+    display:block;
+    margin:10px 0;
+    padding:14px;
+    border-radius:14px;
+    background:rgba(255,255,255,.9);
+    color:#000;
+    font-weight:bold;
+    text-decoration:none;
+    transition:.3s;
+}
+.buttons a:hover{
+    background:#fff;
+    transform:scale(1.03);
 }
 </style>
 </head>
@@ -90,6 +102,7 @@ p{
 <body>
 
 <div class="card">
+
     <!-- الصورة -->
     <img id="avatar" class="avatar">
 
@@ -106,25 +119,38 @@ p{
         <a id="telegram" target="_blank"><i class="fab fa-telegram"></i></a>
         <a id="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
     </div>
+
+    <!-- الأزرار -->
+    <div class="buttons">
+        <a id="btn1">زر 1</a>
+        <a id="btn2">زر 2</a>
+        <a id="btn3">زر 3</a>
+        <a id="btn4">زر 4</a>
+    </div>
+
 </div>
 
 <script>
-const data = JSON.parse(localStorage.getItem("linksData"));
+const data = JSON.parse(localStorage.getItem("linksData")) || {};
 const defaultAvatar = "https://i.imgur.com/8Km9tLL.png";
 
-if(data){
-    document.getElementById("name").innerText = data.name || "";
-    document.getElementById("job").innerText = data.job || "";
-    document.getElementById("avatar").src =
-        data.avatar && data.avatar !== "" ? data.avatar : defaultAvatar;
+/* البيانات الأساسية */
+document.getElementById("name").innerText = data.name || "Name";
+document.getElementById("job").innerText = data.job || "";
+document.getElementById("avatar").src =
+    data.avatar && data.avatar !== "" ? data.avatar : defaultAvatar;
 
-    if(data.instagram) instagram.href = data.instagram;
-    if(data.snapchat) snapchat.href = data.snapchat;
-    if(data.telegram) telegram.href = data.telegram;
-    if(data.youtube) youtube.href = data.youtube;
-}else{
-    document.getElementById("avatar").src = defaultAvatar;
-}
+/* السوشيال */
+if(data.instagram) instagram.href = data.instagram;
+if(data.snapchat) snapchat.href = data.snapchat;
+if(data.telegram) telegram.href = data.telegram;
+if(data.youtube) youtube.href = data.youtube;
+
+/* الأزرار */
+if(data.btn1){ btn1.innerText = data.btn1.text; btn1.href = data.btn1.link; }
+if(data.btn2){ btn2.innerText = data.btn2.text; btn2.href = data.btn2.link; }
+if(data.btn3){ btn3.innerText = data.btn3.text; btn3.href = data.btn3.link; }
+if(data.btn4){ btn4.innerText = data.btn4.text; btn4.href = data.btn4.link; }
 </script>
 
 </body>
