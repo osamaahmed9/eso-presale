@@ -31,13 +31,10 @@ input,button{
     border-radius:8px;
     border:none;
 }
-input[type="color"]{
-    height:45px;
-    padding:4px;
-}
 button{
     background:#00e0ff;
     font-weight:bold;
+    cursor:pointer;
 }
 .preview{
     width:90px;
@@ -47,6 +44,9 @@ button{
     display:block;
     margin:10px auto;
     object-fit:cover;
+}
+input[type="color"]{
+    height:45px;
 }
 hr{
     border:0;
@@ -74,7 +74,6 @@ hr{
 
 <hr>
 
-<!-- السوشيال -->
 <label>Instagram</label>
 <input id="instagram">
 <label>Snapchat</label>
@@ -86,7 +85,6 @@ hr{
 
 <hr>
 
-<!-- الأزرار -->
 <label>زر 1 نص</label><input id="btn1text">
 <label>زر 1 رابط</label><input id="btn1link">
 
@@ -101,7 +99,6 @@ hr{
 
 <hr>
 
-<!-- 🎨 الألوان -->
 <label>لون الخلفية 1</label>
 <input type="color" id="bg1" value="#833ab4">
 
@@ -111,56 +108,69 @@ hr{
 <label>لون الخلفية 3</label>
 <input type="color" id="bg3" value="#fcb045">
 
-<label>لون الكرت</label>
-<input type="color" id="cardColor" value="#ffffff">
-
 <label>لون الأزرار</label>
 <input type="color" id="btnColor" value="#ffffff">
 
-<button onclick="saveData()">💾 حفظ كل التغييرات</button>
+<button onclick="saveData()">💾 حفظ التغييرات</button>
 </div>
 
 <script>
 const preview = document.getElementById("preview");
 const avatarInput = document.getElementById("avatarInput");
 
+/* تحميل البيانات بشكل صريح */
 const data = JSON.parse(localStorage.getItem("linksData")) || {};
 
-// تحميل البيانات
-Object.keys(data).forEach(k=>{
-  if(document.getElementById(k)) document.getElementById(k).value = data[k];
-});
+if(data.name) name.value = data.name;
+if(data.job) job.value = data.job;
 if(data.avatar) preview.src = data.avatar;
 
-// صورة
+if(data.instagram) instagram.value = data.instagram;
+if(data.snapchat) snapchat.value = data.snapchat;
+if(data.telegram) telegram.value = data.telegram;
+if(data.youtube) youtube.value = data.youtube;
+
+if(data.btn1){ btn1text.value = data.btn1.text; btn1link.value = data.btn1.link; }
+if(data.btn2){ btn2text.value = data.btn2.text; btn2link.value = data.btn2.link; }
+if(data.btn3){ btn3text.value = data.btn3.text; btn3link.value = data.btn3.link; }
+if(data.btn4){ btn4text.value = data.btn4.text; btn4link.value = data.btn4.link; }
+
+if(data.bg1) bg1.value = data.bg1;
+if(data.bg2) bg2.value = data.bg2;
+if(data.bg3) bg3.value = data.bg3;
+if(data.btnColor) btnColor.value = data.btnColor;
+
+/* معاينة الصورة */
 avatarInput.onchange = ()=>{
-  const r=new FileReader();
-  r.onload=()=>preview.src=r.result;
-  r.readAsDataURL(avatarInput.files[0]);
+  const file = avatarInput.files[0];
+  if(!file) return;
+  const r = new FileReader();
+  r.onload = ()=> preview.src = r.result;
+  r.readAsDataURL(file);
 };
 
-// حفظ
+/* حفظ البيانات */
 function saveData(){
   const newData = {
-    name:name.value,
-    job:job.value,
-    avatar:preview.src,
-    instagram:instagram.value,
-    snapchat:snapchat.value,
-    telegram:telegram.value,
-    youtube:youtube.value,
-    btn1:{text:btn1text.value,link:btn1link.value},
-    btn2:{text:btn2text.value,link:btn2link.value},
-    btn3:{text:btn3text.value,link:btn3link.value},
-    btn4:{text:btn4text.value,link:btn4link.value},
+    name: name.value.trim(),
+    job: job.value.trim(),
+    avatar: preview.src || "",
+    instagram: instagram.value.trim(),
+    snapchat: snapchat.value.trim(),
+    telegram: telegram.value.trim(),
+    youtube: youtube.value.trim(),
+    btn1:{ text:btn1text.value.trim(), link:btn1link.value.trim() },
+    btn2:{ text:btn2text.value.trim(), link:btn2link.value.trim() },
+    btn3:{ text:btn3text.value.trim(), link:btn3link.value.trim() },
+    btn4:{ text:btn4text.value.trim(), link:btn4link.value.trim() },
     bg1:bg1.value,
     bg2:bg2.value,
     bg3:bg3.value,
-    cardColor:cardColor.value,
     btnColor:btnColor.value
   };
-  localStorage.setItem("linksData",JSON.stringify(newData));
-  alert("✅ تم حفظ الألوان والبيانات");
+
+    localStorage.setItem("linksData", JSON.stringify(newData));
+  alert("✅ تم حفظ الاسم ولن يختفي بعد الآن");
 }
 </script>
 
