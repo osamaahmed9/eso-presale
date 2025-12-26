@@ -23,14 +23,8 @@ body{
     border-radius:20px;
     padding:20px;
 }
-h2{
-    text-align:center;
-    margin-bottom:15px;
-}
-label{
-    font-size:13px;
-    opacity:.9;
-}
+h2{text-align:center;margin-bottom:15px}
+label{font-size:13px;opacity:.9}
 input,button{
     width:100%;
     padding:10px;
@@ -39,13 +33,8 @@ input,button{
     border:none;
     font-size:14px;
 }
-input{
-    background:#fff;
-}
-input[type="color"]{
-    height:45px;
-    padding:4px;
-}
+input{background:#fff}
+input[type="color"]{height:45px;padding:4px}
 button{
     background:#fff;
     font-weight:bold;
@@ -74,51 +63,42 @@ hr{
 <div class="container">
 <h2>لوحة التحكم</h2>
 
-<!-- الصورة -->
 <img id="preview" class="preview">
 <input type="file" id="avatarInput" accept="image/*">
 
 <label>الاسم</label>
-<input id="name" placeholder="الاسم">
+<input id="name">
 
 <label>الوصف</label>
-<input id="job" placeholder="الوصف">
+<input id="job">
 
 <hr>
 
 <label>Instagram</label>
-<input id="instagram" placeholder="https://instagram.com/...">
+<input id="instagram">
 
 <label>Snapchat</label>
-<input id="snapchat" placeholder="https://snapchat.com/...">
+<input id="snapchat">
 
 <label>Telegram</label>
-<input id="telegram" placeholder="https://t.me/...">
+<input id="telegram">
 
 <label>YouTube</label>
-<input id="youtube" placeholder="https://youtube.com/...">
+<input id="youtube">
 
 <hr>
 
-<label>زر 1 (نص)</label>
-<input id="btn1text">
-<label>زر 1 (رابط)</label>
-<input id="btn1link">
+<label>زر 1 نص</label><input id="btn1text">
+<label>زر 1 رابط</label><input id="btn1link">
 
-<label>زر 2 (نص)</label>
-<input id="btn2text">
-<label>زر 2 (رابط)</label>
-<input id="btn2link">
+<label>زر 2 نص</label><input id="btn2text">
+<label>زر 2 رابط</label><input id="btn2link">
 
-<label>زر 3 (نص)</label>
-<input id="btn3text">
-<label>زر 3 (رابط)</label>
-<input id="btn3link">
+<label>زر 3 نص</label><input id="btn3text">
+<label>زر 3 رابط</label><input id="btn3link">
 
-<label>زر 4 (نص)</label>
-<input id="btn4text">
-<label>زر 4 (رابط)</label>
-<input id="btn4link">
+<label>زر 4 نص</label><input id="btn4text">
+<label>زر 4 رابط</label><input id="btn4link">
 
 <hr>
 
@@ -134,14 +114,16 @@ hr{
 <label>لون الأزرار</label>
 <input type="color" id="btnColor" value="#ffffff">
 
-<button onclick="saveData()">💾 حفظ التغييرات</button>
+<button type="button" id="saveBtn">💾 حفظ التغييرات</button>
 </div>
 
 <script>
+/* ================== تحميل العناصر ================== */
 const preview = document.getElementById("preview");
 const avatarInput = document.getElementById("avatarInput");
+const saveBtn = document.getElementById("saveBtn");
 
-/* تحميل البيانات */
+/* ================== تحميل البيانات ================== */
 const data = JSON.parse(localStorage.getItem("linksData")) || {};
 
 if(data.name) name.value = data.name;
@@ -163,17 +145,17 @@ if(data.bg2) bg2.value = data.bg2;
 if(data.bg3) bg3.value = data.bg3;
 if(data.btnColor) btnColor.value = data.btnColor;
 
-/* معاينة الصورة */
-avatarInput.onchange = ()=>{
+/* ================== معاينة الصورة ================== */
+avatarInput.addEventListener("change", ()=>{
     const file = avatarInput.files[0];
     if(!file) return;
     const reader = new FileReader();
     reader.onload = ()=> preview.src = reader.result;
     reader.readAsDataURL(file);
-};
+});
 
-/* حفظ البيانات */
-function saveData(){
+/* ================== زر الحفظ (الحل النهائي) ================== */
+saveBtn.addEventListener("click", ()=>{
     const newData = {
         name: name.value.trim(),
         job: job.value.trim(),
@@ -186,15 +168,15 @@ function saveData(){
         btn2:{ text:btn2text.value.trim(), link:btn2link.value.trim() },
         btn3:{ text:btn3text.value.trim(), link:btn3link.value.trim() },
         btn4:{ text:btn4text.value.trim(), link:btn4link.value.trim() },
-        bg1: bg1.value,
-        bg2: bg2.value,
-        bg3: bg3.value,
-        btnColor: btnColor.value
+        bg1:bg1.value,
+        bg2:bg2.value,
+        bg3:bg3.value,
+        btnColor:btnColor.value
     };
 
     localStorage.setItem("linksData", JSON.stringify(newData));
-    alert("✅ تم حفظ جميع البيانات بنجاح");
-}
+    alert("✅ تم حفظ جميع التغييرات بنجاح");
+});
 </script>
 
 </body>
