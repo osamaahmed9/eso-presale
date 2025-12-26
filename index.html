@@ -5,10 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Link in Bio</title>
 
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-/* خلفية إنستجرام */
+:root{
+    --bg1:#833ab4;
+    --bg2:#fd1d1d;
+    --bg3:#fcb045;
+    --btnColor:#ffffff;
+}
+
 body{
     margin:0;
     font-family:Arial, Tahoma;
@@ -16,7 +23,7 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
 }
 
 /* الكرت */
@@ -45,7 +52,6 @@ body{
 h2{
     margin:8px 0 4px;
     font-size:22px;
-    font-weight:bold;
 }
 
 /* الوصف */
@@ -55,7 +61,7 @@ p{
     opacity:.9;
 }
 
-/* أيقونات السوشيال */
+/* السوشيال */
 .socials{
     display:flex;
     justify-content:center;
@@ -80,21 +86,20 @@ p{
     color:#fd1d1d;
 }
 
-/* الأزرار المستطيلة */
+/* الأزرار */
 .buttons a{
     display:block;
     margin:10px 0;
     padding:14px;
     border-radius:14px;
-    background:rgba(255,255,255,.9);
+    background:var(--btnColor);
     color:#000;
     font-weight:bold;
     text-decoration:none;
     transition:.3s;
 }
 .buttons a:hover{
-    background:#fff;
-    transform:scale(1.03);
+    transform:scale(1.04);
 }
 </style>
 </head>
@@ -112,7 +117,7 @@ p{
     <!-- الوصف -->
     <p id="job"></p>
 
-    <!-- السوشيال -->
+    <!-- أيقونات السوشيال -->
     <div class="socials">
         <a id="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
         <a id="snapchat" target="_blank"><i class="fab fa-snapchat"></i></a>
@@ -140,7 +145,7 @@ document.getElementById("job").innerText = data.job || "";
 document.getElementById("avatar").src =
     data.avatar && data.avatar !== "" ? data.avatar : defaultAvatar;
 
-/* السوشيال */
+/* روابط السوشيال */
 if(data.instagram) instagram.href = data.instagram;
 if(data.snapchat) snapchat.href = data.snapchat;
 if(data.telegram) telegram.href = data.telegram;
@@ -151,6 +156,12 @@ if(data.btn1){ btn1.innerText = data.btn1.text; btn1.href = data.btn1.link; }
 if(data.btn2){ btn2.innerText = data.btn2.text; btn2.href = data.btn2.link; }
 if(data.btn3){ btn3.innerText = data.btn3.text; btn3.href = data.btn3.link; }
 if(data.btn4){ btn4.innerText = data.btn4.text; btn4.href = data.btn4.link; }
+
+/* 🎨 الألوان من لوحة الأدمن */
+if(data.bg1) document.documentElement.style.setProperty("--bg1", data.bg1);
+if(data.bg2) document.documentElement.style.setProperty("--bg2", data.bg2);
+if(data.bg3) document.documentElement.style.setProperty("--bg3", data.bg3);
+if(data.btnColor) document.documentElement.style.setProperty("--btnColor", data.btnColor);
 </script>
 
 </body>
