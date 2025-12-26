@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لوحة التحكم</title>
+<style>
+body{font-family:Arial;background:#111;color:#fff;padding:20px}
+input,button{width:100%;margin:6px 0;padding:10px}
+button{background:#00e0ff;border:0;font-weight:bold}
+img{width:90px;height:90px;border-radius:50%;display:block;margin:10px auto}
+</style>
+</head>
+
+<body>
+
+<h2>لوحة التحكم</h2>
+
+<img id="preview">
+<input type="file" id="avatar">
+
+<input id="name" placeholder="الاسم">
+<input id="job" placeholder="الوصف">
+
+<button onclick="save()">حفظ</button>
+
+<script>
+const preview = document.getElementById("preview");
+const avatar = document.getElementById("avatar");
+
+// تحميل البيانات المحفوظة
+const saved = JSON.parse(localStorage.getItem("linksData"));
+if(saved){
+  name.value = saved.name || "";
+  job.value = saved.job || "";
+  if(saved.avatar) preview.src = saved.avatar;
+}
+
+// معاينة الصورة
+avatar.onchange = ()=>{
+  const file = avatar.files[0];
+  const reader = new FileReader();
+  reader.onload = ()=> preview.src = reader.result;
+  reader.readAsDataURL(file);
+}
+
+function save(){
+  const data = {
+    name: name.value,
+    job: job.value,
+    avatar: preview.src || ""
+  };
+  localStorage.setItem("linksData", JSON.stringify(data));
+  alert("✅ تم الحفظ");
+}
+</script>
+
+</body>
+</html>
