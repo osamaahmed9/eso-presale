@@ -7,42 +7,52 @@
 
 <style>
 body{
+    margin:0;
     font-family:Arial, Tahoma;
-    background:#0f2027;
+    background:#111;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     color:#fff;
-    padding:20px;
 }
 .container{
-    max-width:400px;
-    margin:auto;
-    background:rgba(255,255,255,.08);
+    width:380px;
+    background:#1c1c1c;
+    border-radius:20px;
     padding:20px;
-    border-radius:15px;
 }
-h2{
-    text-align:center;
-}
+h2{text-align:center}
+label{font-size:13px}
 input,button{
     width:100%;
-    margin:8px 0;
     padding:10px;
+    margin:6px 0 10px;
     border-radius:8px;
     border:none;
-    font-size:14px;
+}
+input[type="color"]{
+    height:45px;
+    padding:4px;
 }
 button{
     background:#00e0ff;
     font-weight:bold;
-    cursor:pointer;
 }
-img{
+.preview{
     width:90px;
     height:90px;
     border-radius:50%;
+    border:3px solid #fff;
     display:block;
     margin:10px auto;
     object-fit:cover;
-    border:3px solid #fff;
+}
+hr{
+    border:0;
+    height:1px;
+    background:#333;
+    margin:12px 0;
 }
 </style>
 </head>
@@ -50,57 +60,107 @@ img{
 <body>
 
 <div class="container">
-    <h2>لوحة التحكم</h2>
+<h2>لوحة التحكم</h2>
 
-    <!-- صورة -->
-    <img id="preview">
-    <input type="file" id="avatarInput" accept="image/*">
+<!-- الصورة -->
+<img id="preview" class="preview">
+<input type="file" id="avatarInput" accept="image/*">
 
-    <!-- الاسم -->
-    <input type="text" id="name" placeholder="الاسم">
+<label>الاسم</label>
+<input id="name">
 
-    <!-- الوصف -->
-    <input type="text" id="job" placeholder="الوصف">
+<label>الوصف</label>
+<input id="job">
 
-    <button onclick="saveData()">حفظ التغييرات</button>
+<hr>
+
+<!-- السوشيال -->
+<label>Instagram</label>
+<input id="instagram">
+<label>Snapchat</label>
+<input id="snapchat">
+<label>Telegram</label>
+<input id="telegram">
+<label>YouTube</label>
+<input id="youtube">
+
+<hr>
+
+<!-- الأزرار -->
+<label>زر 1 نص</label><input id="btn1text">
+<label>زر 1 رابط</label><input id="btn1link">
+
+<label>زر 2 نص</label><input id="btn2text">
+<label>زر 2 رابط</label><input id="btn2link">
+
+<label>زر 3 نص</label><input id="btn3text">
+<label>زر 3 رابط</label><input id="btn3link">
+
+<label>زر 4 نص</label><input id="btn4text">
+<label>زر 4 رابط</label><input id="btn4link">
+
+<hr>
+
+<!-- 🎨 الألوان -->
+<label>لون الخلفية 1</label>
+<input type="color" id="bg1" value="#833ab4">
+
+<label>لون الخلفية 2</label>
+<input type="color" id="bg2" value="#fd1d1d">
+
+<label>لون الخلفية 3</label>
+<input type="color" id="bg3" value="#fcb045">
+
+<label>لون الكرت</label>
+<input type="color" id="cardColor" value="#ffffff">
+
+<label>لون الأزرار</label>
+<input type="color" id="btnColor" value="#ffffff">
+
+<button onclick="saveData()">💾 حفظ كل التغييرات</button>
 </div>
 
 <script>
 const preview = document.getElementById("preview");
 const avatarInput = document.getElementById("avatarInput");
-const nameInput = document.getElementById("name");
-const jobInput = document.getElementById("job");
 
-/* تحميل البيانات المحفوظة */
-const savedData = JSON.parse(localStorage.getItem("linksData")) || {};
+const data = JSON.parse(localStorage.getItem("linksData")) || {};
 
-if(savedData.name) nameInput.value = savedData.name;
-if(savedData.job) jobInput.value = savedData.job;
-if(savedData.avatar) preview.src = savedData.avatar;
-
-/* معاينة الصورة */
-avatarInput.addEventListener("change", () => {
-    const file = avatarInput.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-        preview.src = reader.result;
-    };
-    reader.readAsDataURL(file);
+// تحميل البيانات
+Object.keys(data).forEach(k=>{
+  if(document.getElementById(k)) document.getElementById(k).value = data[k];
 });
+if(data.avatar) preview.src = data.avatar;
 
-/* حفظ البيانات */
+// صورة
+avatarInput.onchange = ()=>{
+  const r=new FileReader();
+  r.onload=()=>preview.src=r.result;
+  r.readAsDataURL(avatarInput.files[0]);
+};
+
+// حفظ
 function saveData(){
-    const data = {
-        name: nameInput.value.trim(),   // ⬅️ الاسم يُحفظ هنا
-        job: jobInput.value.trim(),
-        avatar: preview.src || ""
-    };
-
-    console.log("SAVED:", data); // للتأكد
-
-    localStorage.setItem("linksData", JSON.stringify(data));
-    alert("✅ تم حفظ الاسم بنجاح");
+  const newData = {
+    name:name.value,
+    job:job.value,
+    avatar:preview.src,
+    instagram:instagram.value,
+    snapchat:snapchat.value,
+    telegram:telegram.value,
+    youtube:youtube.value,
+    btn1:{text:btn1text.value,link:btn1link.value},
+    btn2:{text:btn2text.value,link:btn2link.value},
+    btn3:{text:btn3text.value,link:btn3link.value},
+    btn4:{text:btn4text.value,link:btn4link.value},
+    bg1:bg1.value,
+    bg2:bg2.value,
+    bg3:bg3.value,
+    cardColor:cardColor.value,
+    btnColor:btnColor.value
+  };
+  localStorage.setItem("linksData",JSON.stringify(newData));
+  alert("✅ تم حفظ الألوان والبيانات");
 }
 </script>
 
